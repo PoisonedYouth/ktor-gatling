@@ -6,7 +6,7 @@ import org.jetbrains.exposed.sql.insertAndGetId
 import org.jetbrains.exposed.sql.javatime.date
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
-import java.util.*
+import java.util.UUID
 
 const val DEFAULT_COLUMN_LENGTH = 255
 
@@ -61,6 +61,10 @@ class UserRepositoryImpl : UserRepository {
         val firstName = varchar("first_name", DEFAULT_COLUMN_LENGTH)
         val lastName = varchar("last_name", DEFAULT_COLUMN_LENGTH)
         val birthDate = date("birth_date")
+
+        init {
+            uniqueIndex(firstName, lastName)
+        }
     }
 
     object UserBookTable : UUIDTable("user_book", "id") {

@@ -12,7 +12,8 @@ CREATE TABLE `user`
     id         UUID PRIMARY KEY NOT NULL,
     first_name VARCHAR            NOT NULL,
     last_name  VARCHAR            NOT NULL,
-    birth_date DATE               NOT NULL
+    birth_date DATE               NOT NULL,
+    CONSTRAINT name UNIQUE (first_name, last_name)
 );
 CREATE TABLE user_book
 (
