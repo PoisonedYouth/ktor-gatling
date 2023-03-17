@@ -6,6 +6,7 @@ val koinVersion: String by project
 val h2Version: String by project
 val hikariVersion: String by project
 val liquibaseVersion: String by project
+val jUnit5Version: String by project
 
 plugins {
     kotlin("jvm") version "1.8.10"
@@ -44,9 +45,8 @@ dependencies {
     implementation("org.liquibase:liquibase-core:$liquibaseVersion")
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktorVersion")
-    testImplementation("org.junit.jupiter:junit-jupiter-engine:5.9.2")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
-
+    testImplementation("org.junit.jupiter:junit-jupiter-engine:$jUnit5Version")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$jUnit5Version")
 }
 
 tasks.withType<Test> {

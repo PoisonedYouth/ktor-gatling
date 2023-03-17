@@ -1,12 +1,15 @@
-@Suppress("DSL_SCOPE_VIOLATION") // Will be fixed with Gradle 8.1 (see https://github.com/gradle/gradle/issues/22797#issuecomment-1422049473)
+val gatlingVersion: String by project
+
 plugins {
     id("io.gatling.gradle").version("3.9.2")
     kotlin("jvm") version "1.8.10"
 }
 
 dependencies {
-    implementation("io.gatling:gatling-core:3.9.2")
-    implementation("io.gatling:gatling-http-java:3.9.2")
+    implementation("io.gatling:gatling-core:$gatlingVersion")
+    implementation("io.gatling:gatling-http-java:$gatlingVersion")
+    gatling("org.apache.commons:commons-lang3:3.12.0")
+
 }
 
 gatling {

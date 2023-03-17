@@ -36,7 +36,7 @@ fun Application.configureRouting() {
             call.respond(
                 status = HttpStatusCode.Created,
                 message = service.addBook(
-                    userId = UUID.fromString(call.parameters["userid"]),
+                    userId = UUID.fromString(call.parameters["userId"]),
                     bookId = UUID.fromString(call.parameters["bookId"])
                 )
             )
