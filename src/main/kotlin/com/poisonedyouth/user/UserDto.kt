@@ -22,3 +22,7 @@ data class BookDto(
     val title: String,
     val author: String
 )
+
+data class BookIdsDto(
+    val books: List<String>
+)

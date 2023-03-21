@@ -8,54 +8,67 @@ import io.gatling.javaapi.http.HttpDsl
 
 const val HTTP_STATUS_CREATED = 201
 
-fun createCreateUserRequest() = HttpDsl.http("add user").post("/api/v1/user")
-    .body(
-        StringBody(
-            """
-                            {
-                                "firstName": "#{name}",
-                                "lastName": "#{name}",
-                                "birthDate" : "1999-01-01"
-                            }
-                        """.trimIndent()
-        )
-    ).asJson()
-    .check(
-        HttpDsl.status().`is`(HTTP_STATUS_CREATED),
-    )
-    .check(
-        bodyString().exists()
-    )
-    .check(bodyString().transform { body -> body.replace("\"", "") }.saveAs("userId"))
-
-fun createAddBookRequest() = HttpDsl.http("add book")
-    .post("/api/v1/user/\${userId}/book/\${bookId}")
-    .check(
-        HttpDsl.status().`is`(HTTP_STATUS_CREATED),
-    )
-    .check(
-        bodyString().exists()
-    )
-    .check(bodyString().saveAs("userId"))
-
 class UserSimulation : Simulation() {
-
-    private val baseUrl: String = System.getProperty("baseurl")
-
-    private val httpProtocol = HttpDsl.http
-        .baseUrl(baseUrl)
-
-    private val addUserScenario = CoreDsl.scenario("Add new user")
-        .feed(nameFeeder)
-        .exec(
-            createCreateUserRequest(),
+    private fun createCreateUserRequest() = HttpDsl.http("add user").post("/api/v1/user")
+        .body(
+            StringBody(
+                """
+                {
+                    "firstName": "#{firstname}",
+                    "lastName": "#{lastname}",
+                    "birthDate" : "1999-01-01"
+                }
+                """.trimIndent()
+            )
+        ).asJson()
+        .check(
+            HttpDsl.status().`is`(HTTP_STATUS_CREATED),
         )
+        .check(
+            bodyString().exists()
+        )
+        .check(bodyString().transform { body -> body.replace("\"", "") }.saveAs("userId"))
+
+    private fun createAddBookRequest() = HttpDsl.http("add book")
+        .post("/api/v1/user/#{userId}/book")
+        .body(StringBody(
+            """
+            {
+                "books": ["#{bookId}"]
+            }    
+            """.trimIndent()
+        )).asJson()
+        .check(
+            HttpDsl.status().`is`(HTTP_STATUS_CREATED),
+        )
+        .check(
+            bodyString().exists()
+        )
+
+    private fun createCreateBookRequest() = HttpDsl.http("add book").post("/api/v1/book")
+        .body(
+            CoreDsl.StringBody(
+                """
+                {
+                    "title": "#{title}",
+                    "author": "#{author}"
+                }
+                """.trimIndent()
+            )
+        ).asJson()
+        .check(
+            HttpDsl.status().`is`(HTTP_STATUS_CREATED),
+        )
+        .check(
+            CoreDsl.bodyString().exists()
+        )
+        .check(CoreDsl.bodyString().transform { body -> body.replace("\"", "") }.saveAs("bookId"))
 
     private val addBookScenario = CoreDsl.scenario("Add book to user")
         .feed(nameFeeder)
         .feed(bookFeeder)
         .exec(
-            createCreateUserRequest(),
+            createCreateUserRequest()
         )
         .exec(
             createCreateBookRequest()
@@ -66,7 +79,6 @@ class UserSimulation : Simulation() {
 
     init {
         setUp(
-            addUserScenario.injectOpen(CoreDsl.atOnceUsers(100)),
             addBookScenario.injectOpen(CoreDsl.atOnceUsers(100))
         ).protocols(httpProtocol)
     }

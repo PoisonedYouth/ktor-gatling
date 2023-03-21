@@ -1,13 +1,13 @@
 package com.poisonedyouth.user
 
 import java.time.LocalDate
-import java.util.*
+import java.util.UUID
 
 interface ApplicationService {
     fun saveUser(userDto: UserDto): UUID
     fun getUser(userId: UUID): UserWithBooksDto
     fun saveBook(bookDto: BookDto): UUID
-    fun addBook(userId: UUID, bookId: UUID): UUID
+    fun addBooks(userId: UUID, bookIdsDto: BookIdsDto): List<UUID>
 }
 
 class ApplicationServiceImpl(
@@ -20,18 +20,22 @@ class ApplicationServiceImpl(
         return userRepository.save(user)
     }
 
-    override fun addBook(userId: UUID, bookId: UUID): UUID {
-        val user = userRepository.findBy(userId)
-        val book = bookRepository.findBy(bookId)
-        return userRepository.addBook(user, book)
-    }
-
     override fun getUser(userId: UUID): UserWithBooksDto {
         val user = userRepository.findBy(userId)
         val books = bookRepository.findBy(user)
         return user.toUserDto().copy(
             books = books.map { it.toBookDto() }
         )
+    }
+
+    override fun addBooks(userId: UUID, bookIdsDto: BookIdsDto): List<UUID> {
+        val user = userRepository.findBy(userId)
+        val bookIds = mutableListOf<UUID>()
+        bookIdsDto.books.forEach {
+            val book = bookRepository.findBy(UUID.fromString(it))
+            bookIds.add(userRepository.addBook(user, book))
+        }
+        return bookIds
     }
 
     override fun saveBook(bookDto: BookDto): UUID {

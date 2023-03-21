@@ -20,6 +20,7 @@ class BookRepositoryImpl : BookRepository {
 
     override fun save(book: Book): UUID = transaction {
         BookTable.insertAndGetId {
+            it[id] = book.id
             it[title] = book.title
             it[author] = book.author
         }.value

@@ -1,8 +1,14 @@
 package com.poisonedyouth
 
+import io.gatling.javaapi.http.HttpDsl
 import org.apache.commons.lang3.RandomStringUtils
 
 private const val DEFAULT_STRING_LENGTH = 10
+
+val baseUrl: String = System.getProperty("baseurl")
+
+val httpProtocol = HttpDsl.http
+    .baseUrl(baseUrl)
 
 val bookFeeder = generateSequence {
     val title = RandomStringUtils.randomAlphabetic(DEFAULT_STRING_LENGTH)
@@ -11,6 +17,7 @@ val bookFeeder = generateSequence {
 }.iterator()
 
 val nameFeeder = generateSequence {
-    val name = RandomStringUtils.randomAlphabetic(DEFAULT_STRING_LENGTH)
-    mapOf("name" to name)
+    val firstname = RandomStringUtils.randomAlphabetic(DEFAULT_STRING_LENGTH)
+    val lastname = RandomStringUtils.randomAlphabetic(DEFAULT_STRING_LENGTH)
+    mapOf("firstname" to firstname, "lastname" to lastname)
 }.iterator()

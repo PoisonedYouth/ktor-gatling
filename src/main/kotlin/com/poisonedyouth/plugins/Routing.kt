@@ -32,12 +32,12 @@ fun Application.configureRouting() {
                 )
             )
         }
-        post("/api/v1/user/{userId}/book/{bookId}") {
+        post("/api/v1/user/{userId}/book") {
             call.respond(
                 status = HttpStatusCode.Created,
-                message = service.addBook(
+                message = service.addBooks(
                     userId = UUID.fromString(call.parameters["userId"]),
-                    bookId = UUID.fromString(call.parameters["bookId"])
+                    bookIdsDto = call.receive()
                 )
             )
         }

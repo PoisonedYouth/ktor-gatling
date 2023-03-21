@@ -34,6 +34,7 @@ class UserRepositoryImpl : UserRepository {
     }
 
     private fun saveUser(user: User) = UserTable.insertAndGetId { insertStatement ->
+        insertStatement[id] = user.id
         insertStatement[firstName] = user.firstName
         insertStatement[lastName] = user.lastName
         insertStatement[birthDate] = user.birthDate
