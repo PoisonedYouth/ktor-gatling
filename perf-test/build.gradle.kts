@@ -1,4 +1,5 @@
 val gatlingVersion: String by project
+val h2Version: String by project
 
 plugins {
     id("io.gatling.gradle").version("3.9.2")
@@ -9,12 +10,12 @@ dependencies {
     implementation("io.gatling:gatling-core:$gatlingVersion")
     implementation("io.gatling:gatling-http-java:$gatlingVersion")
     gatling("org.apache.commons:commons-lang3:3.12.0")
-
+    gatling("com.h2database:h2:$h2Version")
 }
 
 gatling {
     simulations = closureOf<PatternFilterable> {
-        include("**/*Simulation*.kt")
+        include("**/*Simulation.kt")
     }
 
     systemProperties = mapOf(

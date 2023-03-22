@@ -2,6 +2,7 @@ package com.poisonedyouth
 
 import io.gatling.javaapi.core.CoreDsl.csv
 import io.gatling.javaapi.http.HttpDsl
+import io.gatling.javaapi.jdbc.JdbcDsl.jdbcFeeder
 import org.apache.commons.lang3.RandomStringUtils
 
 private const val DEFAULT_STRING_LENGTH = 10
@@ -26,3 +27,5 @@ val nameFeeder = generateSequence {
 val nameFeederCsv = csv(
     "data/names.csv"
 ).eager()
+
+val nameFeederJdbc = jdbcFeeder("jdbc:h2:file:./inputDb", "user", "password", "SELECT * FROM user_input").random()
