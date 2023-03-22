@@ -10,7 +10,7 @@ dependencies {
     implementation("io.gatling:gatling-core:$gatlingVersion")
     implementation("io.gatling:gatling-http-java:$gatlingVersion")
     gatling("org.apache.commons:commons-lang3:3.12.0")
-    gatling("com.h2database:h2:$h2Version")
+    gatlingRuntimeOnly("com.h2database:h2:$h2Version")
 }
 
 gatling {
