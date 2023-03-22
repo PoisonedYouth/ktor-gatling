@@ -1,5 +1,6 @@
 package com.poisonedyouth
 
+import io.gatling.javaapi.core.CoreDsl.csv
 import io.gatling.javaapi.http.HttpDsl
 import org.apache.commons.lang3.RandomStringUtils
 
@@ -21,3 +22,7 @@ val nameFeeder = generateSequence {
     val lastname = RandomStringUtils.randomAlphabetic(DEFAULT_STRING_LENGTH)
     mapOf("firstname" to firstname, "lastname" to lastname)
 }.iterator()
+
+val nameFeederCsv = csv(
+    "data/names.csv"
+).eager()

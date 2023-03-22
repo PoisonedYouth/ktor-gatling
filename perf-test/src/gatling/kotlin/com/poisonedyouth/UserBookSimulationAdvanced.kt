@@ -71,17 +71,19 @@ class UserBookSimulationAdvanced : Simulation() {
                 .exec(createCreateUserRequest())
                 .exec { session ->
                     val userIds: List<String> = session.getList("userIds")
-                    session.set("userIds", userIds + session.get("userId"))
+                    val userId: String = session.get("userId") ?: error("UserId not found")
+                    session.set("userIds", userIds + userId)
                 }
                 .exec(createCreateBookRequest())
                 .exec { session ->
-                    val bookIds: List<String> = session.getList("bookIds")
-                    session.set("bookIds", bookIds + session.get("bookId"))
+                    val userIds: List<String> = session.getList("bookIds")
+                    val userId: String = session.get("bookId") ?: error("BookId not found")
+                    session.set("bookIds", userIds + userId)
                 }
         )
         .exec { session ->
             val userIds: List<String> = session.getList("userIds")
-            val userId = userIds.random()
+            val userId = userIds.randomOrNull()
             session.set("currentUserId", userId)
         }
         .exec { session ->
